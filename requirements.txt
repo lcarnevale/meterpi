@@ -1,0 +1,7 @@
+Adafruit-GPIO==1.0.3
+Adafruit-PureIO==1.1.8
+mock==4.0.3
+pi-ina219==1.4.0
+pkg-resources==0.0.0
+psutil==5.8.0
+spidev==3.5
