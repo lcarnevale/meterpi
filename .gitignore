@@ -129,4 +129,7 @@ dmypy.json
 .pyre/
 
 # Persistent queue
-app/data
+*/data
+
+# Logging
+*/log
