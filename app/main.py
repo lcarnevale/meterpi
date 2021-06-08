@@ -10,15 +10,13 @@ The comments follows the Google Python Style Guide:
 __copyright__ = 'Copyright 2021, FCRlab at University of Messina'
 __author__ = 'Lorenzo Carnevale <lcarnevale@unime.it>'
 __credits__ = ''
-__description__ = ''
+__description__ = 'Meter the Raspberry Pi resources (cpu, mem, net) and power consumption.'
 
-import time
-import json
-import logging
+import os
 import argparse
-from sensors import Sensors
-from datetime import datetime
-
+from writer import Writer
+# from reader import Reader
+from threading import Lock
 
 def main():
     description = ('%s\n%s' % (__author__, __description__))
@@ -28,11 +26,10 @@ def main():
         epilog = epilog
     )
 
-    # parser.add_argument('-c', '--config',
-    #                     dest='config',
-    #                     help='YAML configuration file',
-    #                     type=str,
-    #                     required=True)
+    parser.add_argument('-s', '--sampling_rate',
+                        dest='sampling_rate',
+                        help='Sample sensors data any X seconds.',
+                        type=int, default=1)
 
     parser.add_argument('-v', '--verbosity',
                         dest='verbosity',
@@ -40,28 +37,29 @@ def main():
                         action="store_true")
 
     options = parser.parse_args()
+    sampling_rate = options.sampling_rate
+    verbosity = options.verbosity
+    logdir_name = 'log'
+    mutex = Lock()
+
+    if not os.path.exists(logdir_name):
+        os.makedirs(logdir_name)
     
-    sensors = Sensors()
-    while True:
-        data = {
-            "measurement": "",
-            "tags": {
-                "region": "sicily",
-                "city": "messina",
-                "mac_address": sensors.get_MAC(),
-                "pi_model": sensors.get_pi_model()
-            },
-            "fields": {
-                "power_consumption": sensors.get_ina219_reading(),
-                "cpu": sensors.get_cpu_reading(),
-                "memory": sensors.get_mem_reading(),
-                "network": sensors.get_net_reading()
-            },
-            "time": datetime.utcnow()
-        }
-        print(json.dumps(data, indent=4, sort_keys=True, default=str))
-        print("TODO: send to MQTT topic.")
-        time.sleep(1)
+    writer = setup_writer(sampling_rate, mutex, verbosity)
+    # reader = setup_reader(mutex, verbosity)
+    writer.start()
+    # reader.start()
+
+def setup_writer(sampling_rate, mutex, verbosity):
+    writer = Writer(sampling_rate, mutex, verbosity)
+    writer.setup()
+    return writer
+
+# def setup_reader(mutex, verbosity):
+#     reader = Reader(config['host'], config['port'], config['token'],
+#             config['organization'], config['bucket'], mutex, verbosity)
+#     reader.setup()
+#     return reader
 
 
 if __name__ == "__main__":
