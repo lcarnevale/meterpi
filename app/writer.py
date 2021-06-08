@@ -53,7 +53,7 @@ class Writer:
         self.__mutex.release()
 
         try:
-            self.__populate_forever()
+            self.__populate_forever(sampling_rate)
         except KeyboardInterrupt:
             pass
 
