@@ -26,7 +26,7 @@ def main():
         epilog = epilog
     )
 
-    parser.add_argument('-s', '--sampling_rate',
+    parser.add_argument('-r', '--rate',
                         dest='sampling_rate',
                         help='Sample sensors data any X seconds.',
                         type=int, default=1)
