@@ -7,7 +7,7 @@ The comments follows the Google Python Style Guide:
     https://github.com/google/styleguide/blob/gh-pages/pyguide.md
 """
 
-__copyright__ = 'Copyright 2021, FCRlab at University of Messina'
+__copyright__ = 'Copyright 2021, FCRLab at University of Messina'
 __author__ = 'Lorenzo Carnevale <lcarnevale@unime.it>'
 __credits__ = ''
 __description__ = 'The Writer class writes into a persistent queue.'
