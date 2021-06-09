@@ -67,7 +67,22 @@ class Writer:
         sensors = Sensors()
         while True:
             try:
-                data = self.__get_sensors_data(sensors)
+                data = self.__get_power_consumption(sensors)
+                logging.debug('Collected new data')
+                self.__queue.put(data)
+                logging.debug('JSON data insert into the queue: %s' % (data))
+
+                data = self.__get_cpu(sensors)
+                logging.debug('Collected new data')
+                self.__queue.put(data)
+                logging.debug('JSON data insert into the queue: %s' % (data))
+
+                data = self.__get_memory(sensors)
+                logging.debug('Collected new data')
+                self.__queue.put(data)
+                logging.debug('JSON data insert into the queue: %s' % (data))
+
+                data = self.__get_network(sensors)
                 logging.debug('Collected new data')
                 self.__queue.put(data)
                 logging.debug('JSON data insert into the queue: %s' % (data))
@@ -78,22 +93,56 @@ class Writer:
 
             time.sleep(sampling_rate)
 
-    def __get_sensors_data(self, sensors):
+    def __get_power_consumption(self, sensors):
         return {
-                "measurement": "",
+                "measurement": "power_consumption",
                 "tags": {
                     "region": "sicily",
                     "city": "messina",
                     "mac_address": sensors.get_MAC(),
                     "pi_model": sensors.get_pi_model()
                 },
-                "fields": {
-                    "power_consumption": sensors.get_ina219_reading(),
-                    "cpu": sensors.get_cpu_reading(),
-                    "memory": sensors.get_mem_reading(),
-                    "network": sensors.get_net_reading()
+                "fields": sensors.get_ina219_reading(),
+                "time": str(datetime.utcnow())
+            }
+
+    def __get_cpu(self, sensors):
+        return {
+                "measurement": "cpu",
+                "tags": {
+                    "region": "sicily",
+                    "city": "messina",
+                    "mac_address": sensors.get_MAC(),
+                    "pi_model": sensors.get_pi_model()
                 },
-                "time": datetime.utcnow()
+                "fields": sensors.get_cpu_reading(),
+                "time": str(datetime.utcnow())
+            }
+
+    def __get_memory(self, sensors):
+        return {
+                "measurement": "memory",
+                "tags": {
+                    "region": "sicily",
+                    "city": "messina",
+                    "mac_address": sensors.get_MAC(),
+                    "pi_model": sensors.get_pi_model()
+                },
+                "fields": sensors.get_mem_reading(),
+                "time": str(datetime.utcnow())
+            }
+
+    def __get_network(self, sensors):
+        return {
+                "measurement": "network",
+                "tags": {
+                    "region": "sicily",
+                    "city": "messina",
+                    "mac_address": sensors.get_MAC(),
+                    "pi_model": sensors.get_pi_model()
+                },
+                "fields": sensors.get_net_reading(),
+                "time": str(datetime.utcnow())
             }
 
 
