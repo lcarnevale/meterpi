@@ -1,0 +1,6 @@
+mqtt:
+  host: MQTT-HOST
+  port: MQTT-PORT
+  topics:
+    - MQTT-TOPIC-1
+    - MQTT-TOPIC-2
