@@ -46,10 +46,10 @@ class Sensors:
         return self.__ina.current()
 
     def __get_power(self):
-        return self.__ina.power()
+        return self.__ina.power() / 1000
 
     def __get_shunt_voltage(self):
-        return self.__ina.shunt_voltage()
+        return self.__ina.shunt_voltage() / 1000
 
     
     def get_cpu_reading(self):
