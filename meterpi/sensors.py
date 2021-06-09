@@ -21,7 +21,7 @@ class Sensors:
     def get_pi_model(self):
         with open('/sys/firmware/devicetree/base/model', 'r') as f:
             model = f.read()
-        return model.strip()
+        return model.rstrip('\x00')
 
     def get_MAC(self, interface='wlan0'):
         # Return the MAC address of the specified interface
