@@ -1,0 +1,5 @@
+mqtt:
+  host: broker.mqttdashboard.com
+  port: 1883
+  topics:
+    - fcrlab/meterpi/populate
