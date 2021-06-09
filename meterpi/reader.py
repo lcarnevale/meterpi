@@ -29,6 +29,7 @@ import json
 import socket
 import logging
 import schedule
+import datetime
 import threading
 import persistqueue
 import paho.mqtt.client as mqtt
@@ -93,7 +94,7 @@ class Reader:
             while (not q.empty()):
                 data = q.get()
                 logging.debug("Dequeueing new data")
-                client.publish(topics[0], json.dumps(data, default=str))
+                client.publish(topics[0], json.dumps(data))
                 logging.debug("Sent new data to topic %s" % (topics[0]))
                 time.sleep(0.3)
             logging.debug("The queue is empty")
