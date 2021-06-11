@@ -1,7 +1,10 @@
 Adafruit-GPIO==1.0.3
 Adafruit-PureIO==1.1.8
 mock==4.0.3
+paho-mqtt==1.5.1
+persist-queue==0.6.0
 pi-ina219==1.4.0
-pkg-resources==0.0.0
 psutil==5.8.0
+PyYAML==5.4.1
+schedule==1.1.0
 spidev==3.5
