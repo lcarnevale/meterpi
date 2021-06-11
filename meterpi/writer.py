@@ -99,8 +99,8 @@ class Writer:
                 "tags": {
                     "region": "sicily",
                     "city": "messina",
-                    "mac_address": sensors.get_MAC(),
-                    "pi_model": sensors.get_pi_model()
+                    "mac_address": sensors.get_MAC()
+                    # "pi_model": sensors.get_pi_model()
                 },
                 "fields": sensors.get_ina219_reading(),
                 "time": str(datetime.utcnow())
@@ -112,8 +112,8 @@ class Writer:
                 "tags": {
                     "region": "sicily",
                     "city": "messina",
-                    "mac_address": sensors.get_MAC(),
-                    "pi_model": sensors.get_pi_model()
+                    "mac_address": sensors.get_MAC()
+                    # "pi_model": sensors.get_pi_model()
                 },
                 "fields": sensors.get_cpu_reading(),
                 "time": str(datetime.utcnow())
@@ -125,8 +125,8 @@ class Writer:
                 "tags": {
                     "region": "sicily",
                     "city": "messina",
-                    "mac_address": sensors.get_MAC(),
-                    "pi_model": sensors.get_pi_model()
+                    "mac_address": sensors.get_MAC()
+                    # "pi_model": sensors.get_pi_model()
                 },
                 "fields": sensors.get_mem_reading(),
                 "time": str(datetime.utcnow())
@@ -138,8 +138,8 @@ class Writer:
                 "tags": {
                     "region": "sicily",
                     "city": "messina",
-                    "mac_address": sensors.get_MAC(),
-                    "pi_model": sensors.get_pi_model()
+                    "mac_address": sensors.get_MAC()
+                    # "pi_model": sensors.get_pi_model()
                 },
                 "fields": sensors.get_net_reading(),
                 "time": str(datetime.utcnow())
