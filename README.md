@@ -26,3 +26,10 @@ Open the log file for watching what is going on.
 ```bash
 tail -f /var/log/lcarnevale/meterpi.log
 ```
+
+## Troubleshooting
+
+```
+FileNotFoundError: [Errno 2] No such file or directory: '/dev/i2c-1'
+```
+Enable i2c in the ```raspi-config``` interface menu.
