@@ -10,6 +10,7 @@ The comments follows the Google Python Style Guide:
 import psutil
 from ina219 import INA219
 from ina219 import DeviceRangeError
+from gpiozero import CPUTemperature
 
 class Sensors:
 
@@ -55,6 +56,7 @@ class Sensors:
     def get_cpu_reading(self):
         return {
             "cpu_percentage":  self.__get_cpu_percent(),
+            "cpu_temperature": self.__get_cpu_temperature(),
             # "cpu_frequency":  self.__get_cpu_frequency()
         }
 
@@ -64,6 +66,8 @@ class Sensors:
     def __get_cpu_frequency(self):
         return psutil.cpu_freq(percpu=True)
 
+    def __get_cpu_temperature(self):
+        return CPUTemperature().temperature
 
     def get_mem_reading(self):
         mem = self.__get_virtual_memory()
