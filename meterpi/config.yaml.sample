@@ -4,3 +4,6 @@ mqtt:
   topics:
     - MQTT-TOPIC-1
     - MQTT-TOPIC-2
+tags:
+  TAG1-KEY: TAG1-VALUE 
+  TAG2-KEY: TAG2-VALUE 
