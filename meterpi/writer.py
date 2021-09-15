@@ -24,7 +24,8 @@ from datetime import datetime
 
 class Writer:
 
-    def __init__(self, sampling_rate, mutex, verbosity):
+    def __init__(self, tags, sampling_rate, mutex, verbosity):
+        self.__tags = tags
         self.__sampling_rate = sampling_rate
         self.__mutex = mutex
         self.__writer = None
@@ -43,21 +44,21 @@ class Writer:
     def setup(self):
         self.__writer = threading.Thread(
             target = self.__writer_job, 
-            args = ([self.__sampling_rate])
+            args = ([self.__tags, self.__sampling_rate])
         )
 
-    def __writer_job(self, sampling_rate):
+    def __writer_job(self, tags, sampling_rate):
         # SQLite objects created in a thread can only be used in that same thread.
         self.__mutex.acquire()
         self.__queue = persistqueue.SQLiteQueue('data', multithreading=True, auto_commit=True)
         self.__mutex.release()
 
         try:
-            self.__populate_forever(sampling_rate)
+            self.__populate_forever(tags, sampling_rate)
         except KeyboardInterrupt:
             pass
 
-    def __populate_forever(self, sampling_rate=1):
+    def __populate_forever(self, tags, sampling_rate=1):
         """Populate the database with sensors data.
 
         Args:
@@ -67,22 +68,22 @@ class Writer:
         sensors = Sensors()
         while True:
             try:
-                data = self.__get_power_consumption(sensors)
+                data = self.__get_power_consumption(tags, sensors)
                 logging.debug('Collected new data')
                 self.__queue.put(data)
                 logging.debug('JSON data insert into the queue: %s' % (data))
 
-                data = self.__get_cpu(sensors)
+                data = self.__get_cpu(tags, sensors)
                 logging.debug('Collected new data')
                 self.__queue.put(data)
                 logging.debug('JSON data insert into the queue: %s' % (data))
 
-                data = self.__get_memory(sensors)
+                data = self.__get_memory(tags, sensors)
                 logging.debug('Collected new data')
                 self.__queue.put(data)
                 logging.debug('JSON data insert into the queue: %s' % (data))
 
-                data = self.__get_network(sensors)
+                data = self.__get_network(tags, sensors)
                 logging.debug('Collected new data')
                 self.__queue.put(data)
                 logging.debug('JSON data insert into the queue: %s' % (data))
@@ -93,57 +94,57 @@ class Writer:
 
             time.sleep(sampling_rate)
 
-    def __get_power_consumption(self, sensors):
-        return {
+    def __get_power_consumption(self, tags, sensors):
+        data = {
                 "measurement": "power_consumption",
                 "tags": {
-                    "region": "sicily",
-                    "city": "messina",
                     "mac_address": sensors.get_MAC(),
                     "pi_model": sensors.get_pi_model()
                 },
                 "fields": sensors.get_ina219_reading(),
                 "time": str(datetime.utcnow())
             }
+        data['tags'] = {**data['tags'], **tags}
+        return data
 
-    def __get_cpu(self, sensors):
-        return {
+    def __get_cpu(self, tags, sensors):
+        data =  {
                 "measurement": "cpu",
                 "tags": {
-                    "region": "sicily",
-                    "city": "messina",
                     "mac_address": sensors.get_MAC(),
                     "pi_model": sensors.get_pi_model()
                 },
                 "fields": sensors.get_cpu_reading(),
                 "time": str(datetime.utcnow())
             }
+        data['tags'] = {**data['tags'], **tags}
+        return data
 
-    def __get_memory(self, sensors):
-        return {
+    def __get_memory(self, tags, sensors):
+        data =  {
                 "measurement": "memory",
                 "tags": {
-                    "region": "sicily",
-                    "city": "messina",
                     "mac_address": sensors.get_MAC(),
                     "pi_model": sensors.get_pi_model()
                 },
                 "fields": sensors.get_mem_reading(),
                 "time": str(datetime.utcnow())
             }
+        data['tags'] = {**data['tags'], **tags}
+        return data
 
-    def __get_network(self, sensors):
-        return {
+    def __get_network(self, tags, sensors):
+        data =  {
                 "measurement": "network",
                 "tags": {
-                    "region": "sicily",
-                    "city": "messina",
                     "mac_address": sensors.get_MAC(),
                     "pi_model": sensors.get_pi_model()
                 },
                 "fields": sensors.get_net_reading(),
                 "time": str(datetime.utcnow())
             }
+        data['tags'] = {**data['tags'], **tags}
+        return data
 
 
     def start(self):

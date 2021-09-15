@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 
 """
-This implementation does its best to follow the Robert Martin's Clean code guidelines.
+This implementation does its best to follow the Robert Martin's Clean code  guidelines.
 The comments follows the Google Python Style Guide:
     https://github.com/google/styleguide/blob/gh-pages/pyguide.md
 """
@@ -56,14 +56,14 @@ def main():
 
     if not os.path.exists(logdir_name):
         os.makedirs(logdir_name)
-    
-    writer = setup_writer(sampling_rate, mutex, verbosity)
+
+    writer = setup_writer(config['tags'], sampling_rate, mutex, verbosity)
     reader = setup_reader(config['mqtt'], mutex, verbosity)
     writer.start()
     reader.start()
 
-def setup_writer(sampling_rate, mutex, verbosity):
-    writer = Writer(sampling_rate, mutex, verbosity)
+def setup_writer(tags, sampling_rate, mutex, verbosity):
+    writer = Writer(tags, sampling_rate, mutex, verbosity)
     writer.setup()
     return writer
 
